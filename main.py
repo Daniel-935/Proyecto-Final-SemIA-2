@@ -31,3 +31,31 @@ y = data['class_type']
 
 #*Se crean los sets para train y test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+#*Recibe siempre los sets de train y test
+def logisticRegression(xTrain, xTest, yTrain, yTest):
+    #*Se usa el logistic regression
+    model = LogisticRegression(max_iter=10000)
+    #*Se entrena el modelo
+    model.fit(xTrain, yTrain)
+    #*Se realizan las predicciones
+    yOutput = model.predict(xTest)
+
+    #*Se realizan las metricas de evaluacion
+    accuracy = accuracy_score(y_test, yOutput)
+    #*En estos casos se usa por el tipo de problema con multiples variables y por los resultados que sean una division por 0
+    precision = precision_score(y_test, yOutput, average='weighted', zero_division=1)
+    sensitivity = recall_score(y_test, yOutput, average='weighted', zero_division=1)
+    #*Toma los primeros 4 valores de cada fila del resultado de la matriz para poder realizar la evaluacion
+    tn, fp, fn, tp = confusion_matrix(y_test, yOutput).ravel()[:4]
+    specificity = tn / (tn + fp)
+    f1 = f1_score(y_test, yOutput, average='weighted')
+
+    print("===== Logistic Regression =======")
+    print(f"Accuracy: {accuracy}")
+    print(f"Precision: {precision}")
+    print(f"Sensitivity: {sensitivity}")
+    print(f"Specificity: {specificity}")
+    print(f"F1 Score: {f1}")
+
+logisticRegression(X_train, X_test, y_train, y_test)
