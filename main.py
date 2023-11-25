@@ -42,14 +42,14 @@ def logisticRegression(xTrain, xTest, yTrain, yTest):
     yOutput = model.predict(xTest)
 
     #*Se realizan las metricas de evaluacion
-    accuracy = accuracy_score(y_test, yOutput)
+    accuracy = accuracy_score(yTest, yOutput)
     #*En estos casos se usa por el tipo de problema con multiples variables y por los resultados que sean una division por 0
-    precision = precision_score(y_test, yOutput, average='weighted', zero_division=1)
-    sensitivity = recall_score(y_test, yOutput, average='weighted', zero_division=1)
+    precision = precision_score(yTest, yOutput, average='weighted', zero_division=1)
+    sensitivity = recall_score(yTest, yOutput, average='weighted', zero_division=1)
     #*Toma los primeros 4 valores de cada fila del resultado de la matriz para poder realizar la evaluacion
-    tn, fp, fn, tp = confusion_matrix(y_test, yOutput).ravel()[:4]
+    tn, fp, fn, tp = confusion_matrix(yTest, yOutput).ravel()[:4]
     specificity = tn / (tn + fp)
-    f1 = f1_score(y_test, yOutput, average='weighted')
+    f1 = f1_score(yTest, yOutput, average='weighted')
 
     print("===== Logistic Regression =======")
     print(f"Accuracy: {accuracy}")
@@ -58,4 +58,46 @@ def logisticRegression(xTrain, xTest, yTrain, yTest):
     print(f"Specificity: {specificity}")
     print(f"F1 Score: {f1}")
 
+def kNearest(xTrain, xTest, yTrain, yTest):
+
+    model = KNeighborsClassifier(n_neighbors=5)
+    model.fit(xTrain, yTrain)
+    yOutput = model.predict(xTest)
+
+    accuracy = accuracy_score(yTest, yOutput)
+    precision = precision_score(yTest, yOutput, average='weighted', zero_division=1)
+    sensitivity = recall_score(yTest, yOutput, average='weighted', zero_division=1)
+    tn, fp, fn, tp = confusion_matrix(yTest, yOutput).ravel()[:4]
+    specificity = tn / (tn + fp)
+    f1 = f1_score(yTest, yOutput, average='weighted')
+
+    print("\n======= K-Nearest Neightbors =======")
+    print(f"Accuracy: {accuracy}")
+    print(f"Precision: {precision}")
+    print(f"Sensitivity: {sensitivity}")
+    print(f"Specificity: {specificity}")
+    print(f"F1 Score: {f1}")
+
+def supportVectorMachine(xTrain, xTest, yTrain, yTest):
+
+    model = SVC()
+    model.fit(xTrain, yTrain)
+    yOutput = model.predict(xTest)
+
+    accuracy = accuracy_score(yTest, yOutput)
+    precision = precision_score(yTest, yOutput, average='weighted', zero_division=1)
+    sensitivity = recall_score(yTest, yOutput, average='weighted', zero_division=1)
+    tn, fp, fn, tp = confusion_matrix(yTest, yOutput).ravel()[:4]
+    specificity = tn / (tn + fp)
+    f1 = f1_score(yTest, yOutput, average='weighted')
+
+    print("\n======= Support Vector Machines =======")
+    print(f"Accuracy: {accuracy}")
+    print(f"Precision: {precision}")
+    print(f"Sensitivity: {sensitivity}")
+    print(f"Specificity: {specificity}")
+    print(f"F1 Score: {f1}")
+
 logisticRegression(X_train, X_test, y_train, y_test)
+kNearest(X_train, X_test, y_train, y_test)
+supportVectorMachine(X_train, X_test, y_train, y_test)
