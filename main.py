@@ -4,6 +4,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
+from sklearn.neural_network import MLPClassifier
 
 #*Para las metricas de evaluacion
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -118,7 +119,28 @@ def naiveBayes(xTrain, xTest, yTrain, yTest):
     print(f"Specificity: {specificity}")
     print(f"F1 Score: {f1}")
 
+def MPL(xTrain, xTest, yTrain, yTest):
+    
+    model = MLPClassifier(hidden_layer_sizes=100, max_iter=1000)
+    model.fit(xTrain, yTrain)
+    yOutput = model.predict(xTest)
+
+    accuracy = accuracy_score(yTest, yOutput)
+    precision = precision_score(yTest, yOutput, average='weighted', zero_division=1)
+    sensitivity = recall_score(yTest, yOutput, average='weighted', zero_division=1)
+    tn, fp, fn, tp = confusion_matrix(yTest, yOutput).ravel()[:4]
+    specificity = tn / (tn + fp)
+    f1 = f1_score(yTest, yOutput, average='weighted')
+
+    print("\n======= MPL =======")
+    print(f"Accuracy: {accuracy}")
+    print(f"Precision: {precision}")
+    print(f"Sensitivity: {sensitivity}")
+    print(f"Specificity: {specificity}")
+    print(f"F1 Score: {f1}")
+
 logisticRegression(X_train, X_test, y_train, y_test)
 kNearest(X_train, X_test, y_train, y_test)
 supportVectorMachine(X_train, X_test, y_train, y_test)
 naiveBayes(X_train, X_test, y_train, y_test)
+MPL(X_train, X_test, y_train, y_test)
