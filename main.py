@@ -24,7 +24,7 @@ variableNames = ['animal_name',
 ]
 
 data = pd.read_csv('zoo.csv', header=None, names=variableNames)
-print(data)
+
 #*Se divide el dataset en X y Y (entradas / salidas)
 X = data.drop(['animal_name', 'class_type'], axis=1)
 y = data['class_type']
@@ -98,6 +98,27 @@ def supportVectorMachine(xTrain, xTest, yTrain, yTest):
     print(f"Specificity: {specificity}")
     print(f"F1 Score: {f1}")
 
+def naiveBayes(xTrain, xTest, yTrain, yTest):
+
+    model = GaussianNB()
+    model.fit(xTrain, yTrain)
+    yOutput = model.predict(xTest)
+
+    accuracy = accuracy_score(yTest, yOutput)
+    precision = precision_score(yTest, yOutput, average='weighted', zero_division=1)
+    sensitivity = recall_score(yTest, yOutput, average='weighted', zero_division=1)
+    tn, fp, fn, tp = confusion_matrix(yTest, yOutput).ravel()[:4]
+    specificity = tn / (tn + fp)
+    f1 = f1_score(yTest, yOutput, average='weighted')
+
+    print("\n======= Naive Bayes =======")
+    print(f"Accuracy: {accuracy}")
+    print(f"Precision: {precision}")
+    print(f"Sensitivity: {sensitivity}")
+    print(f"Specificity: {specificity}")
+    print(f"F1 Score: {f1}")
+
 logisticRegression(X_train, X_test, y_train, y_test)
 kNearest(X_train, X_test, y_train, y_test)
 supportVectorMachine(X_train, X_test, y_train, y_test)
+naiveBayes(X_train, X_test, y_train, y_test)
